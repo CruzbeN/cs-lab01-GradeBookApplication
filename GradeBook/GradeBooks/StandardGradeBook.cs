@@ -11,7 +11,7 @@ namespace GradeBook.GradeBooks
         public StandardGradeBook(string name, bool isweighted) : base(name, isweighted)
         {
             Type = Enums.GradeBookType.Standard;
-            isWeighted = isweighted;
+            IsWeighted = isweighted;
         }
     }
 }
