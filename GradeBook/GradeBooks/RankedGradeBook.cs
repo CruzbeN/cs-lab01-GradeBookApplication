@@ -19,40 +19,37 @@ namespace GradeBook.GradeBooks
         {
             if (Students.Count < 5)
             {
-                throw new InvalidOperationException("You must have at least 5 students to do ranked grading.");
+                throw new InvalidOperationException();
             }
 
-            int threshold = (int)Math.Ceiling(Students.Count * 0.2);
+            double ile = (1 / Students.Count) * 100;
+            double suma = 0;
 
-            List<Student> sortedStudents = Students.OrderByDescending(s => s.AverageGrade).ToList();
-
-            for (int i = 0; i < sortedStudents.Count; i += threshold)
+            foreach (var student in Students)
             {
-                if (i == 0 || sortedStudents[i - 1].AverageGrade > averageGrade)
+                suma += ile;
+                foreach (var grade in student.Grades)
                 {
-                    if (i + threshold > sortedStudents.Count || sortedStudents[i + threshold - 1].AverageGrade < averageGrade)
+                    if (averageGrade < grade)
                     {
-                        return 'A';
-                    }
-                    else
-                    {
-                        return 'B';
-                    }
-                }
-                else if (i + threshold > sortedStudents.Count || sortedStudents[i + threshold - 1].AverageGrade < averageGrade)
-                {
-                    if (i + threshold * 2 > sortedStudents.Count || sortedStudents[i + threshold * 2 - 1].AverageGrade < averageGrade)
-                    {
-                        return 'C';
-                    }
-                    else
-                    {
-                        return 'D';
+                        suma -= ile;
+                        break;
                     }
                 }
             }
 
-            return 'F';
+            if (averageGrade >= 80)
+                return 'A';
+            else if (averageGrade >= 60)
+                return 'B';
+            else if (averageGrade >= 40)
+                return 'C';
+            else if (averageGrade >= 20)
+                return 'D';
+            else
+                return 'F';
+
+
         }
 
         public override void CalculateStatistics()
